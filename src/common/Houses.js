@@ -12,6 +12,7 @@ class Houses extends Component {
         this.getHouses = this.getHouses.bind(this);
         this.handleCreateUser = this.handleCreateUser.bind(this);
         this.handleUpdateUser = this.handleUpdateUser.bind(this);
+        this.handleCallError = this.handleCallError.bind(this);
     }
 
     getHouses() {
@@ -23,6 +24,14 @@ class Houses extends Component {
 		.then((listHouses) => {
 			this.setState( { listHouses: listHouses });
 		})
+	}
+
+	handleCallError(response) {
+		if(response.status != 200){
+			throw 'Error on save. Estatus: ' + response.status;
+		}
+
+		return response.json()
 	}
 
 	handleCreateUser() {
@@ -40,13 +49,7 @@ class Houses extends Component {
 			isActive: 'true'
 		  }),
 		})
-		.then((response) => {
-			if(response.status == 200){
-				return response.json()
-			}else{
-				throw 'Error on save. Posiblemente el email este duplicado';
-			}
-		})
+		.then(this.handleCallError)
 		.then((result) => {
 			console.log('Post service result: ', result);
 			this.setState( { resultCreateUser: 'Usuario creado satisfactoriamente id:' + 
@@ -57,6 +60,7 @@ class Houses extends Component {
 	      this.setState( { resultCreateUser: error });
 	    });
 	}
+
 
 	handleUpdateUser() {
 		fetch('http://localhost:3000/api/user/5a8e47da1b92a6037ae9ad12', {
@@ -73,13 +77,7 @@ class Houses extends Component {
 			isActive: 'true'
 		  }),
 		})
-		.then((response) => {
-			if(response.status == 200){
-				return response.json()
-			}else{
-				throw 'Error on update. Posiblemente el email este duplicado';
-			}
-		})
+		.then(this.handleCallError)
 		.then((result) => {
 			console.log('Post service result: ', result);
 			this.setState( { resultCreateUser: 'Usuario creado satisfactoriamente id:' + 

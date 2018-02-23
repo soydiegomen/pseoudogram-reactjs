@@ -8,6 +8,7 @@ import Items from './common/Items';
 import Details from './common/Details';
 import Pseudogram from './App';
 import Houses from './common/Houses';
+import Users from './users/Users';
 
 
 
@@ -23,6 +24,7 @@ class App extends Component {
               <Route path="/details/:itemid" component={Details} />
               <Route path="/pseudogram" component={Pseudogram} />
               <Route path="/houses" component={Houses} />
+              <Route path="/users" component={Users} />
       			</div>
       		</Router>
 	    );

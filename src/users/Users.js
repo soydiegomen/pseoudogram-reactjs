@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import UsersList from './UsersList';
+import UserDetails from './UserDetails';
+import Createuser from './CreateUser';
+
+import './Users.css'; 
 
 
 class Users extends Component {
@@ -8,10 +12,14 @@ class Users extends Component {
     	super(props);
 
         this.handleSelectUser = this.handleSelectUser.bind(this);
+        this.state = { 
+        	userId: null
+        }
     }
 
 	handleSelectUser(e) {
     	console.log('Seleccionado: ' + e.target.id);
+    	this.setState( { userId: e.target.id });
     }
 
 	render() {
@@ -22,6 +30,12 @@ class Users extends Component {
 	      		<h1>Users view!</h1>	      		
 	      		<div>
 	      			<UsersList clickHandle={this.handleSelectUser}/>
+	      		</div>
+	      		<div>
+	      			<UserDetails id={this.state.userId} />
+	      		</div>
+	      		<div>
+	      			<Createuser />
 	      		</div>
 	      	</div>
 	    );

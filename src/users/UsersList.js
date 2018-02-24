@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './Users.css'; 
 
 class UsersList extends Component {
 
@@ -9,8 +8,6 @@ class UsersList extends Component {
         	listUsers: []
         }
     }
-
-
 
     componentWillMount() {
 		fetch('http://localhost:3000/api/users')

@@ -8,7 +8,8 @@ class CreateUser extends Component {
         this.state = { 
         	name: null,
         	email: null,
-        	password: null
+        	password: null,
+        	resultCreateUser: null
         }
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -29,7 +30,39 @@ class CreateUser extends Component {
 	    console.log('An essay was submitted: ' + this.state.name);
 	    console.log('An essay was submitted: ' + this.state.email);
 	    console.log('An essay was submitted: ' + this.state.password);
+
+	    var user = {
+			name: this.state.name,
+			email: this.state.email,
+			password: this.state.password,
+			userType: 'User',
+			isActive: 'true'
+		};
+		this.saveUser(user);
+
 	    event.preventDefault();
+  	}
+
+  	saveUser(user){
+  		fetch('http://localhost:3000/api/users', {
+		  method: 'POST',
+		  headers: {
+		    Accept: 'application/json',
+		    'Content-Type': 'application/json',
+		  },
+		  body: JSON.stringify(user),
+		})
+		.then(this.handleCallError)
+		.then((result) => {
+			console.log('Post service result: ', result);
+			this.setState( { resultCreateUser: 'Usuario creado satisfactoriamente id:' + 
+				result._id });
+			this.props.userCreatedHandel();
+		})
+		.catch((error) => {
+	      console.error(error);
+	      this.setState( { resultCreateUser: error });
+	    });
   	}	
 
 	render() {
@@ -73,10 +106,22 @@ class CreateUser extends Component {
 	      				</tbody>
 	      			</table>
 	      		</form>
+	      		<br/>
+	      		<br/>
+	      		<span>{this.state.resultCreateUser}</span>
 	      	</div>
 
 	    );
   	}
+
+  	/*Utilities*/
+  	handleCallError(response) {
+		if(response.status != 200){
+			throw 'Error on save. Estatus: ' + response.status;
+		}
+
+		return response.json()
+	}
 }
 
 export default CreateUser;

@@ -3,24 +3,9 @@ import React, { Component } from 'react';
 class UsersList extends Component {
 
 	constructor(props) {
-    	super(props);/*
-        this.state = { 
-        	listUsers: []
-        }*/
-
+    	super(props);
         this.showUsers = this.showUsers.bind(this);
     }
-
-    componentWillMount() {
-		/*fetch('http://localhost:3000/api/users')
-		.then((response) => {
-
-			return response.json()
-		})
-		.then((listUsers) => {
-			this.setState( { listUsers: listUsers });
-		})*/
-	}
 
 	render() {
 		
@@ -28,26 +13,52 @@ class UsersList extends Component {
     	return (
     		<div className="App">
 	      		<h3 className="user-list-title">Lista de usuarios</h3>	      		
-	      		<ul className="user-list">
-	      			{this.showUsers(this.props.clickHandle)}
-	      		</ul>
+	      		<table className="user-table">
+	      			<thead>
+	      				<tr>
+	      					<td>
+	      						Nombre
+	      					</td>
+	      					<td>
+	      						Email
+	      					</td>
+	      					<td>
+	      						Acciones
+	      					</td>
+	      				</tr>
+	      			</thead>
+	      			{this.showUsers(this.props.clickHandle, this.props.onDelete)}
+	      		</table>
 	      	</div>
 	    );
   	}
 
-  	showUsers(clickHandele) {
+  	showUsers(clickHandele, handleDeleteUser) {
   		var users = this.props.listUsers;
   		console.log('userslist', users);
   		if(users){
   			return (
-  				<div>
+  				<tbody>
   					{
   						users.map((user) => {
-							return (<li><a href="#" onClick={clickHandele} id={user._id}>{user.email}</a></li>);
+							return (
+									<tr>
+										<td>
+											<span>{user.name}</span>
+										</td>
+										<td>
+											<span>{user.email}</span>
+										</td>
+										<td>
+											<button onClick={clickHandele} id={user._id}>Ver detalles</button>
+											<button onClick={handleDeleteUser} id={user._id}>Eliminar</button>
+										</td>
+									</tr>
+
+							);
 	      				})	  
 	      			}
-	      			<h3>Some value!</h3>
-				</div>
+				</tbody>
   			);
   		}
   	}

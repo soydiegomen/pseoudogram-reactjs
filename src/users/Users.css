@@ -3,10 +3,9 @@
 	margin-left: 20px;
 }
 
-.user-list li{
-	text-align: left;
+table.user-table{
+	margin:20px; 
 }
-
 .user-table td{
 	text-align: left;
 }

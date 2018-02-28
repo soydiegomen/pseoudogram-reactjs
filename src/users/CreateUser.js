@@ -27,9 +27,6 @@ class CreateUser extends Component {
 	}
 
 	handleSubmit(event) {
-	    console.log('An essay was submitted: ' + this.state.name);
-	    console.log('An essay was submitted: ' + this.state.email);
-	    console.log('An essay was submitted: ' + this.state.password);
 
 	    var user = {
 			name: this.state.name,
@@ -38,6 +35,7 @@ class CreateUser extends Component {
 			userType: 'User',
 			isActive: 'true'
 		};
+
 		this.saveUser(user);
 
 	    event.preventDefault();
@@ -54,8 +52,8 @@ class CreateUser extends Component {
 		})
 		.then(this.handleCallError)
 		.then((result) => {
-			console.log('Post service result: ', result);
-			this.setState( { resultCreateUser: 'Usuario creado satisfactoriamente id:' + 
+			this.setState( { 
+				resultCreateUser: 'Usuario creado satisfactoriamente id:' + 
 				result._id });
 			this.props.userCreatedHandel();
 		})
@@ -106,7 +104,6 @@ class CreateUser extends Component {
 	      				</tbody>
 	      			</table>
 	      		</form>
-	      		<br/>
 	      		<br/>
 	      		<span>{this.state.resultCreateUser}</span>
 	      	</div>

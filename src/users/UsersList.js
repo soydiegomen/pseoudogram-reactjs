@@ -4,12 +4,11 @@ class UsersList extends Component {
 
 	constructor(props) {
     	super(props);
-        this.showUsers = this.showUsers.bind(this);
+
     }
 
 	render() {
 		
-
     	return (
     		<div className="App">
 	      		<h3 className="user-list-title">Lista de usuarios</h3>	      		
@@ -27,15 +26,15 @@ class UsersList extends Component {
 	      					</td>
 	      				</tr>
 	      			</thead>
-	      			{this.showUsers(this.props.clickHandle, this.props.onDelete)}
+	      			{ this.renderUsers() }
 	      		</table>
 	      	</div>
 	    );
   	}
 
-  	showUsers(clickHandele, handleDeleteUser) {
+  	renderUsers() {
   		var users = this.props.listUsers;
-  		console.log('userslist', users);
+  		
   		if(users){
   			return (
   				<tbody>
@@ -50,8 +49,10 @@ class UsersList extends Component {
 											<span>{user.email}</span>
 										</td>
 										<td>
-											<button onClick={clickHandele} id={user._id}>Ver detalles</button>
-											<button onClick={handleDeleteUser} id={user._id}>Eliminar</button>
+											<button onClick={this.props.clickHandle} 
+												id={user._id}>Modificar</button>
+											<button onClick={this.props.onDelete} 
+												id={user._id}>Eliminar</button>
 										</td>
 									</tr>
 

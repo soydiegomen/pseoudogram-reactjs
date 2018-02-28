@@ -12,12 +12,10 @@ class UpdateUser extends Component {
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.showUserDetails = this.showUserDetails.bind(this);
-        this.saveUser = this.saveUser.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
-		console.log('newId', nextProps)
+
         if (nextProps.id) {
             fetch('http://localhost:3000/api/user/'+ nextProps.id)
 			.then((response) => {
@@ -26,6 +24,8 @@ class UpdateUser extends Component {
 			.then((user) => {
 				this.setState( { user: user });
 			})
+        }else {
+        	this.setState( { user: null });
         }
     }
 
@@ -45,7 +45,7 @@ class UpdateUser extends Component {
 	    event.preventDefault();
 
 	    const user = this.state.user;
-	    console.log('user to update', user);
+
   		fetch('http://localhost:3000/api/user/' + user._id, {
 		  method: 'PUT',
 		  headers: {
@@ -56,8 +56,9 @@ class UpdateUser extends Component {
 		})
 		.then(this.handleCallError)
 		.then((result) => {
-			console.log('PUT service result: ', result);
-			this.setState( { resultCreateUser: 'Usuario actualizado satisfactoriamente id:' + 
+			
+			this.setState( { 
+				resultCreateUser: 'Usuario actualizado satisfactoriamente id:' + 
 				result._id });
 			this.props.onUpdatedUser();
 		})
@@ -67,24 +68,27 @@ class UpdateUser extends Component {
 	    });
   	}
 
-  	saveUser(user){
-  		
-  	}	
-
 	render() {
-    	return (
-    		<div>
-	      		<h3 className="user-list-title">Añadir un usuario</h3>	      		
-	      		{this.showUserDetails()}
-	      		<br/>
-	      		<br/>
-	      		<span>{this.state.resultCreateUser}</span>
-	      	</div>
+		if(this.state.user){
 
-	    );
+	    	return (
+	    		<div>
+		      		<h3 className="user-list-title">Actualizar usuario</h3>	      		
+		      		{ this.renderUserForm() }
+		      		<br/>
+		      		<span>{this.state.resultCreateUser}</span>
+		      	</div>
+
+		    );
+	    }else {
+	    	return (
+	    		<span>No hay algún usuario seleccionado para edición</span>
+	    	);
+	    }
+
   	}
 
-  	showUserDetails () {
+  	renderUserForm () {
   		if(this.state.user){
   			return(
   				<form onSubmit={this.handleSubmit}>

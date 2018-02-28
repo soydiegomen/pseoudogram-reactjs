@@ -14,27 +14,40 @@ class Users extends Component {
 
         this.state = { 
         	userId: null,
-        	listUsers: []
+        	listUsers: [],
+            showAddForm: false
         }
 
         this.handleSelectUser = this.handleSelectUser.bind(this);
         this.handleUserCreated = this.handleUserCreated.bind(this);
         this.handleDeleteUser = this.handleDeleteUser.bind(this);
         this.handleUpdatedUser = this.handleUpdatedUser.bind(this);
+        this.handleShowAddForm = this.handleShowAddForm.bind(this);
+        
     }
 
     componentWillMount() {
     	this.getUsers();
     }
 
+    /*List Users*/
+    getUsers() {
+        fetch('http://localhost:3000/api/users')
+        .then((response) => {
+
+            return response.json()
+        })
+        .then((listUsers) => {
+            this.setState( { listUsers: listUsers });
+        })
+    }
+
 	handleSelectUser(e) {
-    	console.log('Seleccionado: ' + e.target.id);
     	this.setState( { userId: e.target.id });
     }
 
+    /*Delete User*/
     handleDeleteUser(e) {
-        console.log('Seleccionado para borrar: ' + e.target.id);
-        //fetch('http://localhost:3000/api/user/' + e.target.id)
         fetch('http://localhost:3000/api/user/' + e.target.id, {
           method: 'DELETE',
           headers: {
@@ -43,7 +56,6 @@ class Users extends Component {
           }
         })
         .then((response) => {
-
             return;
         })
         .then(() => {
@@ -51,30 +63,37 @@ class Users extends Component {
         })
     }
 
-    handleUserCreated() {
-    	console.log('Usuario creado!!');
-    	this.getUsers();
-    }
-
+    /*Update User*/
     handleUpdatedUser() {
-        console.log('Usuario actualizado!!');
-        this.getUsers();   
+        this.getUsers(); 
+        this.setState( { userId: null });  
     }
 
-    getUsers() {
-    	fetch('http://localhost:3000/api/users')
-		.then((response) => {
-
-			return response.json()
-		})
-		.then((listUsers) => {
-			this.setState( { listUsers: listUsers });
-		})
+    /*Add User*/
+    handleShowAddForm(){
+        this.setState({
+            showAddForm: !this.state.showAddForm
+        });
     }
 
+    renderAddForm() {
+        if(this.state.showAddForm){
+            return (
+                <Createuser userCreatedHandel={this.handleUserCreated} />
+            );
+        }
+    }
+
+    handleUserCreated() {
+        this.setState({
+            showAddForm: false
+        });
+        this.getUsers();
+    }
+
+    /*Render Control*/
 	render() {
 		
-
     	return (
     		<div className="App">
 	      		<h1>Users view!</h1>	      		
@@ -82,10 +101,8 @@ class Users extends Component {
 	      			<UsersList listUsers={this.state.listUsers} clickHandle={this.handleSelectUser} onDelete={this.handleDeleteUser}/>
 	      		</div>
 	      		<div>
-	      			<UserDetails id={this.state.userId} />
-	      		</div>
-	      		<div>
-	      			<Createuser userCreatedHandel={this.handleUserCreated} />
+                    <button onClick={this.handleShowAddForm}>Añadir un usuario</button>
+                    { this.renderAddForm() }
 	      		</div>
                 <div>
                     <UpdateUser id={this.state.userId} onUpdatedUser={this.handleUpdatedUser}/>
